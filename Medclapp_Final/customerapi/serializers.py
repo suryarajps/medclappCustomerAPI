@@ -68,11 +68,20 @@ class DepartmentSerializer(serializers.ModelSerializer):
         model = Department
         fields = ('__all__')
 
+class ProfilecompletioneSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = ProfileCompletion
+        fields = ('id','fullname','address','user','location','coverpicture','photo','bed_numbers','category','departments')
+    category=CategorySerializer(read_only=True)
+    departments=DepartmentSerializer(read_only=True)
+
 
 """Doctors"""
 
 class DoctorSerializer(serializers.ModelSerializer):
     departments=serializers.StringRelatedField(read_only=True)
+    # organisation=serializers.StringRelatedField(read_only=True)
     class Meta:
         model = Doctor
         fields = ('__all__')
@@ -85,12 +94,7 @@ class UserprofileSerializer(serializers.ModelSerializer):
         model = Userprofile
         fields = ('coverpicture',)
 
-class ProfilecompletioneSerializer(serializers.ModelSerializer):
-    # category=serializers.StringRelatedField(read_only=True)
-    # departments=serializers.StringRelatedField(read_only=True)
-    class Meta:
-        model = ProfileCompletion
-        fields = ('__all__')
+
 
 """Serviceprovider"""
 
@@ -100,7 +104,7 @@ class ServiceproviderSerializer(serializers.ModelSerializer):
     # phone=serializers.StringRelatedField(read_only=True)
     class Meta:
         model = ProfileCompletion
-        fields = ('__all__')
+        fields = fields = ('id','fullname','address','user','location','coverpicture','photo','category')
         depth=2
 
 # class ServiceproviderdetailSerializer(serializers.ModelSerializer):

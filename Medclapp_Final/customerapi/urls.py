@@ -1,6 +1,6 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
-from .views import ServiceDetailView, Userview,RequestView,RequestList,CategoryView,ServiceProviderList,DepartmentView,DoctorView,CustomerLogin,CustomerLogout,SPList,FiltersView
+from .views import ServiceDetailView, Userview,RequestView,RequestList,CategoryView,ServiceProviderList,DepartmentView,DoctorView,CustomerLogin,CustomerLogout,SPList
 
 urlpatterns = [
     path("userview", Userview.as_view()), #signup and list
@@ -12,11 +12,11 @@ urlpatterns = [
     path("department", DepartmentView.as_view()),
     path("doctor", DoctorView.as_view()),
     path("list", ServiceProviderList.as_view()), 
-    path("details/<int:pk>", ServiceDetailView.as_view()), # not working need to check
+    path("details/<int:pk>", ServiceDetailView.as_view()),
     path("request", RequestView.as_view()),
     path("requestlist", RequestList.as_view()),
     path("SPList", SPList.as_view()),
-    path('filters/', FiltersView.as_view(), name='Filters')#try
+    # path('filters/', FiltersView.as_view(), name='Filters')#try
 
 
 ]

@@ -1,5 +1,5 @@
 from django.db.models import fields
-from rest_framework import authentication, exceptions
+from rest_framework import authentication, exceptions, generics
 from rest_framework.authentication import SessionAuthentication, BaseAuthentication, TokenAuthentication
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import login as djangologin, logout as djangologout
@@ -14,7 +14,7 @@ from .serializers import  FiltersSerializers, ProfilecompletioneSerializer, Serv
 from Admin_Section.models import Category,Department
 from ServiceProvider.models import Doctor,CustomUser, ProfileCompletion, Userprofile
 from drf_multiple_model.views import ObjectMultipleModelAPIView
-
+from rest_framework.filters import SearchFilter
 
 # USERS
 
@@ -94,19 +94,23 @@ class CategoryView(APIView):
 
 # SERVICE PROVIDER LIST (is same as listing category).
 
-class ServiceProviderList(APIView):
+class ServiceProviderList(generics.ListAPIView):
+    queryset = ProfileCompletion.objects.all()
+    serializer_class=ServiceproviderSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['fullname', 'category__name','departments__dept_name']
 
-    def get(self, request, format=None):
-        query = ProfileCompletion.objects.all()
-        serializer = ServiceproviderSerializer(query, many=True)
-        return Response(serializer.data)
+    # def get(self, request, format=None):
+    #     query = ProfileCompletion.objects.all()
+    #     serializer = ServiceproviderSerializer(query, many=True)
+    #     return Response(serializer.data)
     
-    def post(self, request, format=None):
-        serializer = ServiceproviderSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+    # def post(self, request, format=None):
+    #     serializer = ServiceproviderSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
 # SERVICE / Department
 
@@ -147,35 +151,47 @@ class SPList(ObjectMultipleModelAPIView):
         {'queryset': CustomUser.objects.all(), 'serializer_class': UserCreationSerializer},
     ]
 
-#try
-class FiltersView(APIView):
-    def get(self,request,*args,**kwargs):
-        filters = {}
-        filters['model_1'] = Userprofile.objects.all()
+# #try
+# class FiltersView(APIView):
+#     def get(self,request,*args,**kwargs):
+#         filters = {}
+#         filters['model_1'] = Userprofile.objects.all()
         
-        filters['model_2'] = ProfileCompletion.objects.all()
+#         filters['model_2'] = ProfileCompletion.objects.all()
         
-        filters['model_3'] = CustomUser.objects.all()
-        print(filters)
-        serializer = FiltersSerializers(filters)
-        return Response (serializer.data, status=status.HTTP_200_OK)
+#         filters['model_3'] = CustomUser.objects.all()
+#         print(filters)
+#         serializer = FiltersSerializers(filters)
+#         return Response (serializer.data, status=status.HTTP_200_OK)
 
 
 # SERVICE PROVIDER DETAILS
 
 class ServiceDetailView(APIView):
     
-    def get_queryset(self,pk):
-        print(self.kwargs['pk'])
-        queryset = ProfileCompletion.objects.get(id=pk)
-        print(queryset)
-        queryset =Doctor.objects.filter(organisation=queryset.fullname)
-        print(queryset)
-        # qs=Service.objects.filter(category=self.kwargs['pk'])
-        # print(qs,queryset)
-        return queryset
+    # def get_queryset(self,pk):
+    #     print(self.kwargs['pk'])
+    #     queryset = ProfileCompletion.objects.get(id=pk)
+    #     print(queryset)
+    #     queryset =Doctor.objects.filter(organisation=queryset.fullname)
+    #     print(queryset)
+    #     # qs=Service.objects.filter(category=self.kwargs['pk'])
+    #     # print(qs,queryset)
+    #     return queryset
     
+    # def get(self, request,pk):
+    #     query = self.get_queryset(pk)
+    #     serializer = DoctorSerializer(query, many=True)
+    #     return Response(serializer.data)
+
+    def get_object(self,pk):
+        try:
+            return ProfileCompletion.objects.get(id=pk)
+        except:
+            raise Http404
+
     def get(self, request,pk):
-        query = self.get_queryset(pk)
-        serializer = DoctorSerializer(query, many=True)
+        query = self.get_object(pk)
+        serializer = ProfilecompletioneSerializer(query)
         return Response(serializer.data)
+    

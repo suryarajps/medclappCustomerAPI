@@ -23,6 +23,7 @@ import random
 from django.core.validators import validate_email
 from django.contrib.auth.views import PasswordChangeView
 from ServiceProvider.backends import CustomerBackend
+from rest_framework.filters import SearchFilter,OrderingFilter
 # from Customer.forms import CustomUserCreationForm
 
 
