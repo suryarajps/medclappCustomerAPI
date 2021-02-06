@@ -1,0 +1,49 @@
+{% extends 'admin_section/index.html' %}
+{% block body_block %}
+<div class="container">
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="name" class="form-label">FullName</label>
+      {{form.fullname}}
+    </div>
+    <div class="mb-3">
+      <label for="name" class="form-label">User Name</label>
+      {{form.user}}
+    </div>
+    <!-- <div class="mb-3">
+      <label for="name" class="form-label">Phone</label>
+      {{form.phone}}
+    </div> -->
+    <div class="mb-3">
+      <label for="age" class="form-label">Date of Birth</label>
+      {{form.dOB}}
+    </div>
+    <div class="mb-3">
+        <label for="bloodgroup" class="form-label">Bloodgroup</label>
+       {{form.bloodgroup}}
+      </div>
+      <div class="mb-3">
+        <label for="gender" class="form-label">Sex</label>
+       {{form.gender}}
+      </div>
+      <div class="mb-3">
+        <label for="height" class="form-label">Height</label>
+       {{form.height}}
+      </div>
+      <div class="mb-3">
+        <label for="weight" class="form-label">weight</label>
+       {{form.weight}}
+      </div>
+      <div class="mb-3">
+        <label for="address" class="form-label">Address</label>
+       {{form.address}}
+      </div>
+      <div class="mb-3">
+        <label for="image" class="form-label">Photo</label>
+       {{form.profilepicture}}
+      </div>
+    <input type="submit" name="Add" class="btn btn-success">
+  </form>
+</div>
+  {% endblock %}

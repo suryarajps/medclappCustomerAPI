@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+{% extends "ServiceProvider/index.html" %}
+
+{% block body_block %}
+{%csrf_token%}
+<div class="container">
+        <h1 class="h3 mb-0 text-gray-800" align='center'>List of Serviceproviders</h1>
+        <br>
+       
+        <div class="row">
+            <div class="col-lg-4">
+    
+                {% for val in doc %}
+                <div class="card" style="width: 18rem;">
+                    <img class="card-img-top" src="{{val.photo.url}}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">Name:{{val.fullname}}</h5>
+                        <p class="card-text">Service:{{val.service}}</p>
+                        
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">organization:{{request.user.fullname}}</li>
+                        <li class="list-group-item">Category:{{request.user.category}}</li>
+                        <li class="list-group-item">Phone:{{user.phone}}</li>
+                    </ul>
+                   
+    
+                </div>
+            </div>
+        </div>
+    
+    {% endfor %}
+    </div>
+<br>
+{% endblock %}
+
+  

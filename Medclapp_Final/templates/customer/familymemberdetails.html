@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% extends "Customer/base.html" %}
+
+{% block body_block %}
+<link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+<style>
+    h2 {
+        font-family: 'Work Sans', sans-serif;
+    }
+</style>
+<div class="container">
+<br>
+    <h2 align='center'>Family Members</h2>
+    <br>
+    {%csrf_token%}
+    <div class="row">
+        {% for datas in forms %}
+        <div class="col-lg-3">
+            <div class="card" style="width: 11rem;">
+                <div class="card-body">
+                    <h6 class="card-title">{{datas.fullname}}</h6>
+                    <br>
+                    <h6 class="card-title">{{datas.gender}}</h6>
+                    <br>
+                    <h6 class="card-title">{{datas.dob}}</h6>
+                    <br>
+                    <h6 class="card-title">{{datas.relationship}}</h6>
+                    <br>
+                    <h6 class="card-title">{{datas.phone}}</h6>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

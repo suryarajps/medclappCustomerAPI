@@ -1,0 +1,15 @@
+{% extends 'admin_section/index.html' %}
+{% block body_block %}
+<div class="container">
+    <div class="row">
+<form method="post">
+    <h3>Are you sure to delete Advertisement : {{object}}</h3>
+    {{form.as_p}}
+    {% csrf_token %}
+    <input type="submit" value="Delete" class="btn btn-danger">
+    <a href="{% url 'adminadvertisementlist' %}" class="btn btn-warning">Go back</a>
+</form>
+
+</div>
+</div>
+{% endblock %}

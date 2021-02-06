@@ -1,0 +1,21 @@
+{% extends 'admin_section/index.html' %}
+{% block body_block %}
+<div class="container">
+    <div class="row">
+    <div class="list-group">
+        <!-- <img width="100" height="100" src="{{form.image.url}}"> -->
+        <a  class="list-group-item list-group-item-action active" aria-current="true">
+          Priority: {{form.priority}}
+        </a>
+        <a  class="list-group-item list-group-item-action">Patient Name: {{form.patientname}}</a>  
+        <a  class="list-group-item list-group-item-action">Age : {{form.age}}</a>  
+        <a  class="list-group-item list-group-item-action">Date : {{form.date}}</a>
+        <a  class="list-group-item list-group-item-action">Bloodgroup : {{form.bloodgrouprequest}}</a>
+        <a  class="list-group-item list-group-item-action">Time : {{form.time}}</a>
+        <a  class="list-group-item list-group-item-action">Contact : {{form.phonenumber}}</a>
+        <a  class="list-group-item list-group-item-action">Address : {{form.location}}</a>      
+      </div>
+    </div>
+    </div>
+    {% endblock %}
+     

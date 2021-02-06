@@ -1,0 +1,20 @@
+{% extends 'admin_section/index.html' %}
+{% block body_block %}
+<div class="container">
+    <div class="row">
+     
+    {% for datas in items %}
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Department Name : {{datas.dept_name}}</h5>
+        <p></p>
+        <a href="{% url 'admindepartmentedit' datas.id %}" class="btn btn-warning">Edit</a>
+        <a href="{% url 'admindepartmentview' datas.id %}" class="btn btn-info">View</a>
+        <a href="{% url 'admindepartmentdelete' datas.id %}" class="btn btn-danger">Delete</a>   
+      </div>
+    </div>
+    {% endfor %}
+    </div>
+    </div>
+    {% endblock %}
+     

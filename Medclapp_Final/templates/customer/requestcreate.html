@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% extends "Customer/base.html" %}
+
+{% block body_block %}
+<br>
+    <br>
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <form method="post" enctype="multipart/form-data" autocomplete="off">
+                {%csrf_token%}
+        <div class="mb-3">
+        <label for="bloodgrouprequest" class="form-label">Blood Group</label>
+            {{form.bloodgrouprequest}}
+        </div>
+        <div class="mb-3">
+        <label for="patientname" class="form-label">Name of Patient</label>
+            {{form.patientname}}
+        </div>
+        <div class="mb-3">
+        <label for="age" class="form-label">Age</label>
+            {{form.age}}
+        </div>
+        <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+            {{form.location}}
+        </div>
+        <div class="mb-3">
+        <label for="phonenumber" class="form-label">Phone</label>
+            {{form.phonenumber}}
+        </div>
+        <div class="mb-3">
+        <label for="date" class="form-label">Date</label>
+            {{form.date}}
+        </div>
+        <div class="mb-3">
+        <label for="time" class="form-label">Time</label>
+            {{form.time}}
+        </div>
+        <div class="mb-3">
+        <label for="priority"  class="form-label">Priority</label>
+            {{form.priority}}
+        </div>
+        <input type="submit" value="Add a request" class="btn btn-outline-primary">
+                {% comment %} {{form.as_p}}
+                <input type="submit" value="Add a request" class="btn btn-outline-primary" > {% endcomment %}
+            </form>
+        </div>
+        <div class="col-4"></div>
+    </div>
+<br>
+ {% endblock %}

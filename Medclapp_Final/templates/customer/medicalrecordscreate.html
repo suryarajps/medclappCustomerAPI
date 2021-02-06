@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% extends "Customer/base.html" %}
+
+{% block body_block %}
+<br>
+    <br>
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <form method="post" enctype="multipart/form-data" autocomplete="off">
+                {%csrf_token%}
+        <div class="mb-3">
+        <label for="date" class="form-label">Date</label>
+            {{form.date}}
+        </div>
+        <div class="mb-3">
+        <label for="detail" class="form-label">Detail</label>
+            {{form.detail}}
+        </div>
+        <div class="mb-3">
+        <label for="file" class="form-label">File</label>
+            {{form.file}}
+        </div>
+        <input type="submit" value="Add a Medicalrecord" class="btn btn-outline-primary">
+            </form>
+        </div>
+        <div class="col-4"></div>
+    </div>
+<br>
+ {% endblock %}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% extends "ServiceProvider/index.html" %}
+
+
+{% block body_block %}
+<div class="jumbotron">
+    <div class="container">
+        <h2 style="color: blueviolet;">{{request.user}}</h2>
+<form method="post">
+    {%csrf_token%}
+    {{form.as_p}}
+    <input type="submit" value="Proceed">
+
+    </form>
+    </div>
+</div>
+{% endblock %}

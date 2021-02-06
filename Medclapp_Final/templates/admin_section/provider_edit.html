@@ -1,0 +1,20 @@
+{% extends 'admin_section/index.html' %}
+{% block body_block %}
+<div class="container">
+<h2 align="center">Edit Provider</h2>
+<hr>
+<div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+
+            <form method="post" enctype="multipart/form-data" >
+                {% csrf_token %}
+                {{ form.as_p }}
+        <input type="submit" value="Edit">
+        
+</form>
+<div class="col-12"></div>
+</div>
+</div>
+</div>
+{% endblock %}

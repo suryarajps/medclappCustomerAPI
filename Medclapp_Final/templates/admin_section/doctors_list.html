@@ -1,0 +1,32 @@
+{% extends 'admin_section/index.html' %}
+{% block body_block %}
+<div class="container">
+    <div class="row">
+     
+    {% for datas in items %}
+    <!-- <div class="card border-primary mb-3" style="max-width: 18rem;">
+        <div class="card-header">Service_id:{{datas.0}}</div>
+        <div class="card-body text-primary">
+          <h5 class="card-title">Service:{{datas.1}}</h5>
+          <p class="card-text">Category:{{datas.2}}</p>
+          
+        </div>
+      </div> -->
+    
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Doctor Name : {{datas.fullname}}</h5>
+        <p class="card-text">Doctor Department : {{datas.specialisation}}</p>
+        <p class="card-text">Doctor Category : {{datas.category}}</p>
+        <p class="card-text">Doctor Phone : {{datas.phone}}</p>
+        <p class="card-text">Hospital Name : {{datas.organisation}}</p>
+        <img width="100" height="100" src="{{datas.photo.url}}">
+        <!-- <a href="#" class="btn btn-primary">Blood Group : {{datas.bloodgroup}}</a> -->
+      </div>
+    </div>
+    
+    {% endfor %}
+    </div>
+    </div>
+    {% endblock %}
+     

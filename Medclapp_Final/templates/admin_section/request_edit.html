@@ -1,0 +1,42 @@
+{% extends 'admin_section/index.html' %}
+{% block body_block %}
+<div class="container">
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="name" class="form-label">Bloodgroup</label>
+      {{form.bloodgrouprequest}}
+      <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
+    </div>
+    <div class="mb-3">
+      <label for="age" class="form-label">Patient Name</label>
+      {{form.patientname }}
+    </div>
+    <div class="mb-3">
+      <label for="age" class="form-label">Age</label>
+      {{form.age }}
+    </div>
+    <div class="mb-3">
+      <label for="age" class="form-label">Date of Availibility</label>
+      {{form.date }}
+    </div>
+    <div class="mb-3">
+        <label for="bloodgroup" class="form-label">Time</label>
+       {{form.time}}
+      </div>
+      <div class="mb-3">
+        <label for="gender" class="form-label">Address</label>
+       {{form.location}}
+      </div>
+      <div class="mb-3">
+        <label for="height" class="form-label">Contact</label>
+       {{form.phonenumber}}
+      </div>
+      <div class="mb-3">
+        <label for="weight" class="form-label">Priority</label>
+       {{form.priority}}
+      </div>
+    <input type="submit" name="Edit" class="btn btn-success">
+  </form>
+</div>
+  {% endblock %}

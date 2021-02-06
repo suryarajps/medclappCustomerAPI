@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% extends "ServiceProvider/index.html" %}
+
+{% block body_block %}
+<body>
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+        <div class="col-4"></div>
+        <img src="{{form.image.url}}"class="card-img-top">
+        <div>
+            <br>    
+                    <h4>Cover : {{form.coverpicture}}</h4>
+                    <hr>
+                    <h4>Photo : {{form.photo}}</h4>
+                    <hr>
+                    <h4>Category : {{form.category}}</h4>
+                    <hr>
+                    <h4>Service : {{form.service}}</h4>
+                    
+
+</div>
+
+{% endblock %}

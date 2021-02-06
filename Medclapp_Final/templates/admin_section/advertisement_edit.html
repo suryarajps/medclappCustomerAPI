@@ -1,0 +1,17 @@
+{% extends 'admin_section/index.html' %}
+{% block body_block %}
+<div class="container">
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="name" class="form-label">Advertisement Name</label>
+      {{form.advert_name}}
+    </div>
+      <div class="mb-3">
+        <label for="image" class="form-label">Photo</label>
+       {{form.advert_photo}}
+      </div>
+    <input type="submit" name="Edit" class="btn btn-success">
+  </form>
+</div>
+  {% endblock %}

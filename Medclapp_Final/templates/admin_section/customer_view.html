@@ -1,0 +1,22 @@
+{% extends 'admin_section/index.html' %}
+{% block body_block %}
+<div class="container">
+    <div class="row">
+    <div class="list-group">
+        <img width="100" height="100" src="{{form.profilepicture.url}}">
+        <a  class="list-group-item list-group-item-action active" aria-current="true">
+          FullName : {{form.fullname}}
+        </a>
+        <a  class="list-group-item list-group-item-action">DOB : {{form.dOB}}</a>
+        <a  class="list-group-item list-group-item-action">Email : {{form.email}}</a>
+        <a  class="list-group-item list-group-item-action">Phone : {{form.phone}}</a>
+        <a  class="list-group-item list-group-item-action">Bloodgroup : {{form.bloodgroup}}</a>
+        <a  class="list-group-item list-group-item-action">Sex : {{form.gender}}</a>
+        <a  class="list-group-item list-group-item-action">height : {{form.height}}</a>
+        <a  class="list-group-item list-group-item-action">weight : {{form.weight}}</a>
+        <a  class="list-group-item list-group-item-action">Address : {{form.address}}</a>      
+      </div>
+    </div>
+    </div>
+    {% endblock %}
+     

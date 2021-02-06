@@ -1,0 +1,32 @@
+{% extends 'admin_section/index.html' %}
+{% block body_block %}
+<div class="container">
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Blood Group</th>
+        <th scope="col">Patient Name</th>
+        <th scope="col">Age</th>
+        <th scope="col">Priority</th>
+        <th scope="col">Date</th>
+        <th scope="col">Time</th>
+        <th scope="col">Contact</th>
+        <th scope="col">Address</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for item in form %}
+      <tr>
+        <td>{{item.bloodgrouprequest}}</td>
+        <td>{{item.patientname}}</td>
+        <td>{{item.age}}</td>
+        <td>{{item.priority}}</td>
+        <td>{{item.date}}</td>
+        <td>{{item.time}}</td>
+        <td>{{item.phonenumber}}</td>
+        <td>{{item.location}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endblock %}

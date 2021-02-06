@@ -1,0 +1,23 @@
+{% extends 'admin_section/index.html' %}
+{% block body_block %}
+<div class="container">
+    <div class="row">
+     
+    {% for datas in items %}
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Name : {{datas.name}}</h5>
+        <p class="card-text">Email : {{datas.email}}</p>
+        <p class="card-text">Phone : {{datas.phone}}</p>
+        <p class="card-text"> Address : {{datas.address}}</p>
+        <a href="#" class="btn btn-primary">Category : {{datas.category}}</a>
+        <a href="{% url 'provideredit' datas.id %}" class="btn btn-warning">Edit</a>
+        <a href="{% url 'providerview' datas.id %}" class="btn btn-info">View</a>
+        <a href="{% url 'providerdelete' datas.id %}" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
+    {% endfor %}
+    </div>
+    </div>
+    {% endblock %}
+     

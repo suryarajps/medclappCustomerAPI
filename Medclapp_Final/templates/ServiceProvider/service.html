@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% extends "ServiceProvider/index.html" %}
+
+{% block body_block %}
+<h2 align="center">Add Service</h2>
+<hr>
+<div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+
+            <form method="post" enctype="multipart/form-data" >
+                {% csrf_token %}
+                {{ form.as_p }}
+        <input type="submit" value="Add">
+        
+</form>
+<div class="col-12"></div>
+</div>
+</div>
+{% endblock %}

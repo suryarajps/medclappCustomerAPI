@@ -1,0 +1,17 @@
+{% extends 'admin_section/index.html' %}
+{% block body_block %}
+<div class="container">
+    <div class="row">
+    <div class="list-group">
+        <a  class="list-group-item list-group-item-action active" aria-current="true">
+          FullName : {{form.fullname}}
+        </a>
+        <a  class="list-group-item list-group-item-action">DOB : {{form.dob}}</a>
+        <a  class="list-group-item list-group-item-action">Phone : {{form.phone}}</a>
+        <a  class="list-group-item list-group-item-action">relationship : {{form.relationship}}</a>
+        <a  class="list-group-item list-group-item-action">Sex : {{form.gender}}</a>
+      </div>
+    </div>
+    </div>
+    {% endblock %}
+     

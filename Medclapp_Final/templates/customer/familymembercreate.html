@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% extends "Customer/base.html" %}
+
+{% block body_block %}
+<br>
+    <br>
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <form method="post" enctype="multipart/form-data" autocomplete="off">
+                {%csrf_token%}
+        <div class="mb-3">
+        <label for="fullname" class="form-label">Full Name</label>
+            {{form.fullname}}
+        </div>
+        <div class="mb-3">
+        <label for="gender" class="form-label">Gender</label>
+            {{form.gender}}
+        </div>
+        <div class="mb-3">
+        <label for="dob" class="form-label">Date of Birth</label>
+            {{form.dob}}
+        </div>
+        <div class="mb-3">
+        <label for="relationship" class="form-label">Relationship</label>
+            {{form.relationship}}
+        </div>
+        <div class="mb-3">
+        <label for="phone" class="form-label">Phone</label>
+            {{form.phone}}
+        </div>
+        <input type="submit" value="Add a member" class="btn btn-outline-primary">
+            </form>
+        </div>
+        <div class="col-4"></div>
+    </div>
+<br>
+ {% endblock %}

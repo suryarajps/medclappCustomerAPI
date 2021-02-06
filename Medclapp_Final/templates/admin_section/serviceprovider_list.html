@@ -1,0 +1,26 @@
+{% extends 'admin_section/index.html' %}
+{% block body_block %}
+<div class="container">
+<div class="row">
+ 
+{% for datas in form %}
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Organisation Name : {{datas.0}}</h5>
+      <p class="card-text">Category : {{datas.1}}</p>
+      <a href="{% url 'service' datas.2 %}" class="btn btn-primary">View Services</a>
+    </div>
+  </div>
+<!-- <div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Service Name : {{datas.1}}</h5>
+    <p class="card-text">Category of Service : {{datas.2}}</p>
+    <a href="#" class="btn btn-primary">Service_id : {{datas.0}}</a>
+  </div>
+</div> -->
+
+{% endfor %}
+</div>
+</div>
+{% endblock %}
+ 

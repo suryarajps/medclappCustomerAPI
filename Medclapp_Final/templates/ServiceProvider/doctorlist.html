@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% extends "ServiceProvider/index.html" %}
+
+{% block body_block %}
+{%csrf_token%}
+<div class="container">
+        <h1 class="h3 mb-0 text-gray-800" align='center'>Doctor List</h1>
+        <br>
+        <h1>{{request.user.fullname}}</h1>
+        <table class="table">
+            <tr>
+                <td ><b>Name</b></td>
+                <td ><b>specialisation</b></td>
+                 <td ><b>email</b></td>
+                  <td ><b>service</b></td>
+                <td ><b>phone</b></td>
+                <td><b>photo</b></td>
+                <td></td>
+                <td><b>Options</b></td>
+            </tr>
+            {% for val in qs %}
+            <tr>
+                <td><b>{{val.specialisation}}</b></td>
+                <td><b>{{val.email}}</b></td>
+                <td><b>{{val.service}}</b></td>
+                <td><b>{{val.phone}}</b></td>
+                <td><img height="200px" class="card-img-top" src="{{val.photo.url}}" alt="Card image cap"></td>
+                <td><a href="{% url 'Doctoredit' val.id %}" class="btn btn-outline-primary">Edit</a></td>
+                <td></td>
+                <td><a href="{% url 'DeleteDoctor' val.id %}" class="btn btn-outline-primary">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+<br>
+{% endblock %}
+
+
+

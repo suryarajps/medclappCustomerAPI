@@ -1,0 +1,15 @@
+{% extends 'admin_section/index.html' %}
+{% block body_block %}
+<div class="container">
+    <div class="row">
+    <div class="list-group">
+        <a  class="list-group-item list-group-item-action active" aria-current="true">
+          Date : {{form.date}}
+        </a>
+        <a  class="list-group-item list-group-item-action">details : {{form.detail}}</a>
+        <a  class="list-group-item list-group-item-action">details : {{form.file}}</a>
+      </div>
+    </div>
+    </div>
+    {% endblock %}
+     

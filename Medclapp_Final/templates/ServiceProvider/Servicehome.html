@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% extends "ServiceProvider/index.html" %}
+
+
+{% block body_block %}
+<div class="container">
+    <div class="jumbotron">
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" name="Create">
+</form>
+</div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4">
+
+            {% for user in create %}
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src="{{user.photos.url}}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Name:{{user.categoryy}}</h5>
+                    <img class="card-img-top" src="{{user.maincoverpicture.url}}" alt="Card image cap">
+                </div>
+                </ul>
+                <div class="card-body">
+                    <a href="{%url 'Hrhome' user.id%}" class="card-link">view status</a>
+                </div>
+
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

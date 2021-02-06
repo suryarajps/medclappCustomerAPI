@@ -1,0 +1,28 @@
+{% extends 'admin_section/index.html' %}
+{% block body_block %}
+<div class="container">
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Detail</th>
+        <th scope="col">File</th>
+        <th scope="col">Edit</th>
+        <th scope="col">View</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for datas in items %}
+      <tr>
+        <td>{{datas.date}}</td>
+        <td>{{datas.detail}}</td>
+        <td>{{datas.file}}</td>
+        <td><a href="{% url 'adminrecordsedit' datas.id %}" class="btn btn-warning">Edit</a></td>
+        <td><a href="{% url 'adminrecordsview' datas.id %}" class="btn btn-info">View</a></td>
+        <td><a href="{% url 'adminrecordsdelete' datas.id %}" class="btn btn-danger">Delete</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endblock %}
