@@ -20,16 +20,16 @@
     <div class="row">
         <div class="col-4"></div>
         <div class="col-4">
+        
                 <form method="post" autocomplete="off" enctype="multipart/form-data" >
                     {% csrf_token %}
+                     <div class="mb-3">
+                    <label for="email"  class="form-label">Email</label>
+                        {{form.email}}
+                    </div>
                     <div class="mb-3">
                     <label for="phone" class="form-label">Phone</label>
                         {{form.phone}}
-                    </div>
-                    <div class="mb-3">
-                    <div class="mb-3">
-                    <label for="email"  class="form-label">Email</label>
-                        {{form.email}}
                     </div>
                     <div class="mb-3">
                     <label for="password1"  class="form-label">New Password</label>
@@ -39,7 +39,17 @@
                     <label for="password2"  class="form-label">Confirm Password</label>
                     <input type="password" class="form-control" name="password2" autocomplete="new-password" required="" id="id_password2">
                     </div>
+                       {% for message in messages %}
+
+                    <div class="alert alert-success">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+
+                        {{ message }}
+
+                    </div>
+            {% endfor %}
                     <input type="submit" value="Register" class="btn btn-outline-primary">
+
                     <a href="{% url 'loginpage' %}">Login</a>
         </form>
         </div>

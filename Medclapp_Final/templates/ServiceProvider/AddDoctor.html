@@ -10,7 +10,32 @@
 
             <form method="post" enctype="multipart/form-data" >
                 {% csrf_token %}
-                {{ form.as_p }}
+                  <div class="mb-3">
+                        <label for="photo" class="form-label">Profile_pic</label>
+                       {{form.photo}}
+                      </div>
+                <div class="mb-3">
+                        <label for="fullname" class="form-label">FullName</label>
+                       {{form.fullname}}
+                      </div>
+                      <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                       {{form.email}}
+                      </div>
+                       <div class="mb-3">
+                        <label for="departments" class="form-label">Department</label>
+                       {{form.departments}}
+                      </div>
+                       <div class="mb-3">
+                        <label for="specialisation" class="form-label">specialisation</label>
+                       {{form.specialisation}}
+                      </div>
+                     
+                       <div class="mb-3">
+                        <label for="phone" class="form-label">Phone</label>
+                       {{form.phone}}
+                      </div>
+                      
         <input type="submit" value="Add">
         
 </form>

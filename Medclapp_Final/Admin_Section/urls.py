@@ -2,9 +2,12 @@ from django.contrib import admin
 from django.urls import path,include
 from Admin_Section.views import index,ServiceProviderList,ServiceProviderService,CustomerList,DoctorList,CustomerAdd,CustomerEdit,CustomerView,CustomerDetail,CustomerDelete,ProviderList,Requestcreate,Requestedit,Requestlist,Requestdelete,Requestview
 from Admin_Section.views import BloodEmergency,BloodModerate,BloodNormal,BloodHour,ProviderList,ProviderEdit,ProviderDelete,ProviderAdd,ProviderView,CategoryList,CategoryView,CategoryAdd,CategoryEdit,CategoryDelete
-from Admin_Section.views import DepartmentAdd,DepartmentDelete,DepartmentEdit,DepartmentList,DepartmentView,AdvertisementAdd,AdvertisementDelete,AdvertisementEdit,AdvertisementList,AdvertisementView,MedicalRecordsAdd,MedicalRecordsDelete,MedicalRecordsEdit,MedicalRecordsList,MedicalRecordsView,FamilyMembersAdd,FamilyMembersDelete,FamilyMembersEdit,FamilyMembersList,FamilyMembersView
+from Admin_Section.views import DepartmentAdd,DepartmentDelete,DepartmentEdit,DepartmentList,DepartmentView,AdvertisementAdd,AdvertisementDelete,AdvertisementEdit,AdvertisementList,AdvertisementView,FamilyMembersAdd,FamilyMembersDelete,FamilyMembersEdit,FamilyMembersList,FamilyMembersView
+# MedicalRecordsAdd,MedicalRecordsDelete,MedicalRecordsEdit,MedicalRecordsList,MedicalRecordsView,
+from Admin_Section.views import ServicesAdd,ServiceEdit,ServiceDelete,ServiceList,ServiceView,BlogAdd,BlogDelete,BlogEdit,BlogView,BlogList
 from Customer.views import loginn as custlogin
 from ServiceProvider.views import loginpage
+
 urlpatterns = [
     path('',index,name="adminindex"),
     path('custom',custlogin.as_view(),name="custompage"),
@@ -47,14 +50,19 @@ urlpatterns = [
     path('advertisementview/<int:pk>',AdvertisementView.as_view(),name ="adminadvertisementview"),
     path('advertisementdelete/<int:pk>',AdvertisementDelete.as_view(),name ="adminadvertisementdelete"),
     path('advertisementlist',AdvertisementList.as_view(),name="adminadvertisementlist"),
-    path('medicalrecordsadd',MedicalRecordsAdd.as_view(),name ="adminrecordsadd"),
-    path('medcialrecordsedit/<int:pk>',MedicalRecordsEdit.as_view(),name ="adminrecordsedit"),
-    path('medicalrecordsview/<int:pk>',MedicalRecordsView.as_view(),name ="adminrecordsview"),
-    path('medicalrecordsdelete/<int:pk>',MedicalRecordsDelete.as_view(),name ="adminrecordsdelete"),
-    path('medicalrecordstlist',MedicalRecordsList.as_view(),name="adminrecordslist"),
     path('familymembersadd',FamilyMembersAdd.as_view(),name='adminfamilyadd'),
     path('familymembersedit/<int:pk>',FamilyMembersEdit.as_view(),name='adminfamilyedit'),
     path('familymembersview/<int:pk>',FamilyMembersView.as_view(),name='adminfamilyview'),
     path('familymembersdelete/<int:pk>',FamilyMembersDelete.as_view(),name='adminfamilydelete'),
-    path('familymemberslist',FamilyMembersList.as_view(),name='adminfamilylist'),      
+    path('familymemberslist',FamilyMembersList.as_view(),name='adminfamilylist'),
+    path('serviceadd',ServicesAdd.as_view(),name='adminserviceadd'),
+    path('serviceedit/<int:pk>',ServiceEdit.as_view(),name='adminserviceedit'),
+    path('serviceview/<int:pk>',ServiceView.as_view(),name='adminserviceview'),
+    path('servicedelete/<int:pk>',ServiceDelete.as_view(),name='adminservicedelete'),
+    path('servicelist',ServiceList.as_view(),name='adminservicelist'),
+    path('blogadd',BlogAdd.as_view(),name='adminblogadd'),
+    path('blogedit/<int:pk>',BlogEdit.as_view(),name='adminblogedit'),
+    path('blogview/<int:pk>',BlogView.as_view(),name='adminblogview'),
+    path('blogdelete/<int:pk>',BlogDelete.as_view(),name='adminblogdelete'),
+    path('bloglist',BlogList.as_view(),name='adminbloglist'),       
 ]

@@ -3,10 +3,10 @@ import datetime
 from ServiceProvider.models import CustomUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from django.conf import settings
 
 class CustomerProfile(models.Model):
-    user = models.CharField(max_length=100)
+    user = models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     fullname = models.CharField(max_length=120,unique=True)
     choice = (
         ('AB+ve','AB+ve'),
@@ -33,7 +33,7 @@ class CustomerProfile(models.Model):
 
 
 class Request(models.Model):
-    user = models.CharField(max_length=100)
+    user = models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     choiceb = (
         ('A+','A+'),
         ('B+','B+'),
@@ -66,7 +66,7 @@ class Request(models.Model):
 
 
 class Familymembers(models.Model):
-    user = models.CharField(max_length=100)
+    user = models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     fullname = models.CharField(max_length=50)
     choicec = (
         ('Male','Male'),
@@ -84,13 +84,19 @@ class Familymembers(models.Model):
     
 
 
-class Medicalrecords(models.Model):
-    user = models.CharField(max_length=100)
+class Post(models.Model):
+    user = models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     date = models.DateField(default=datetime.date.today(),blank=False)
-    detail = models.CharField(max_length=200)
-    file = models.FileField(upload_to='images')
-    #add user field
+    description = models.CharField(max_length=200)
+    file = models.FileField(blank=True)
     
     def __str__(self):
-        return self.detail
+        return self.description
+
+class Postfile(models.Model):
+    post = models.ForeignKey(Post,default=None,on_delete=models.CASCADE)
+    file = models.FileField(upload_to='images')
+
+    def __str__(self):
+        return self.post.description
 

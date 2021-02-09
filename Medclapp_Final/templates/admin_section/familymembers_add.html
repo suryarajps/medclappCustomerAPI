@@ -4,6 +4,10 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="mb-3">
+      <label for="name" class="form-label">User</label>
+      {{form.user}}
+    </div>
+    <div class="mb-3">
       <label for="name" class="form-label">FullName</label>
       {{form.fullname}}
     </div>
@@ -22,7 +26,7 @@
        {{form.gender}}
       </div>
       <div class="mb-3">
-        <label for="height" class="form-label">Height</label>
+        <label for="height" class="form-label">Relationship</label>
        {{form.relationship}}
       </div>      
     <input type="submit" name="Add" class="btn btn-success">

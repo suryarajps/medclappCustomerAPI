@@ -14,19 +14,19 @@
     <br>
     {%csrf_token%}
     <div class="row">
-        {% for datas in forms %}
+        {% for val in family %}
         <div class="col-lg-3">
             <div class="card" style="width: 11rem;">
                 <div class="card-body">
-                    <h6 class="card-title">{{datas.fullname}}</h6>
+                    <h6 class="card-title">{{val.fullname}}</h6>
                     <br>
-                    <h6 class="card-title">{{datas.gender}}</h6>
+                    <h6 class="card-title">{{val.gender}}</h6>
                     <br>
-                    <h6 class="card-title">{{datas.dob}}</h6>
+                    <h6 class="card-title">{{val.dob}}</h6>
                     <br>
-                    <h6 class="card-title">{{datas.relationship}}</h6>
+                    <h6 class="card-title">{{val.relationship}}</h6>
                     <br>
-                    <h6 class="card-title">{{datas.phone}}</h6>
+                    <h6 class="card-title">{{val.phone}}</h6>
                 </div>
             </div>
         </div>

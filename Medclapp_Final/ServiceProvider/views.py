@@ -1,8 +1,8 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from ServiceProvider.forms import DoctorForm,ServiceForm,LoginForm,UserprofileForm,CategoryForm,ProfileCompletionForm,CustomUserCreationForm
-from ServiceProvider.models import Userprofile,CustomUser,Doctor,ProfileCompletion
+from ServiceProvider.forms import DoctorForm,ServiceForm,LoginForm,CategoryForm,ProfileCompletionForm,CustomUserCreationForm
+from ServiceProvider.models import CustomUser,Doctor,ProfileCompletion
 from Admin_Section.models import Category,Department
 from django.contrib.auth.forms import PasswordChangeForm
 from django.views.generic import TemplateView,DeleteView,CreateView,ListView
@@ -23,7 +23,7 @@ import random
 from django.core.validators import validate_email
 from django.contrib.auth.views import PasswordChangeView
 from ServiceProvider.backends import CustomerBackend
-from rest_framework.filters import SearchFilter,OrderingFilter
+from Customer.models import Request
 # from Customer.forms import CustomUserCreationForm
 
 
@@ -36,17 +36,21 @@ class Profilecreate(CreateView):
     context = {}
 
     def get(self, request, *args, **kwargs):
-        self.context['form'] = self.form_class(initial={'user': request.user.email})
+        self.context['form'] = self.form_class
         return render(request, self.template_name, self.context)
 
     def post(self, request, *args, **kwargs):
-        form = ProfileCompletionForm(data = request.POST, files = request.FILES)
+        form = ProfileCompletionForm(data=request.POST,files=request.FILES)
+        print(request.user)
         if form.is_valid():
-            form.save()
-            return redirect('Usercreate')
+            print('sucess')
+            profile = form.save(commit=False)
+            profile.user = request.user           
+            profile.save()
+            return redirect('base')
         else:
-            print("failed")
-            return render(request, self.template_name, self.context)
+            print("form none")
+            return redirect('Profilecreate')
 
 #Profile Listing
 class ProfileListing(ListView):
@@ -55,66 +59,48 @@ class ProfileListing(ListView):
     form_class = ProfileCompletionForm
     context = {}
 
-    def get(self,request,*args,**kwargs):
-        self.context['form']=self.form_class()
-        qs=self.model.objects.filter(user=request.user.email)
-        self.context['qs']=qs
-        return render(request,self.template_name,self.context)
+    def get(self, request, *args, **kwargs):
+        self.context['forms'] = self.form_class
+        qs=ProfileCompletion.objects.filter(user=request.user)
+        self.context['doc']=qs
+        return render(request, self.template_name, self.context)
 
 #userprofile
-class Usercreate(CreateView):
-    model = Userprofile
-    form_class = UserprofileForm
-    template_name = "../templates/ServiceProvider/profile_section.html"
-    context = {}
+# class Usercreate(CreateView):
+#     model = Userprofile
+#     form_class = UserprofileForm
+#     template_name = "../templates/ServiceProvider/profile_section.html"
+#     context = {}
 
-    def get(self, request, *args, **kwargs):
-        obj=ProfileCompletion.objects.get(user=request.user.email)
-        self.context['form'] = self.form_class(initial={'organisation':obj.fullname})
-        return render(request, self.template_name, self.context)
+#     def get(self, request, *args, **kwargs):
+#         obj=ProfileCompletion.objects.get(user=request.user.email)
+#         self.context['form'] = self.form_class(initial={'organisation':obj.fullname})
+#         return render(request, self.template_name, self.context)
 
-    def post(self, request, *args, **kwargs):
-        form = UserprofileForm(data = request.POST, files = request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('loginpage')
-        else:
-            return render(request, self.template_name, self.context)
+#     def post(self, request, *args, **kwargs):
+#         form = UserprofileForm(data = request.POST, files = request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('loginpage')
+#         else:
+#             return render(request, self.template_name, self.context)
 
 #user profile listing
-class UserProfilelist(TemplateView):
-    template_name = "../templates/ServiceProvider/categorylist.html"
-    model = Userprofile
-    form_class = UserprofileForm
-    context = {}
+# class UserProfilelist(TemplateView):
+#     template_name = "../templates/ServiceProvider/categorylist.html"
+#     model = Userprofile
+#     form_class = UserprofileForm
+#     context = {}
 
-    def querySet(self):
-        return self.model.objects.all()
+#     def querySet(self):
+#         return self.model.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        self.context['forms'] = self.querySet()
-        return render(request, self.template_name, self.context)
+#     def get(self, request, *args, **kwargs):
+#         self.context['forms'] = self.querySet()
+#         return render(request, self.template_name, self.context)
 
 #user profile edit
 
-#Category section
-class Categorycreate(CreateView):
-    model = Category
-    form_class = CategoryForm()
-    template_name = "../templates/ServiceProvider/category.html"
-    context = {}
-
-    def get(self, request, *args, **kwargs):
-        self.context['form'] = self.form_class
-        return render(request, self.template_name, self.context)
-
-    def post(self, request, *args, **kwargs):
-        form = CategoryForm(data = request.POST, files = request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('Categorylist')
-        else:
-            return render(request, self.template_name, self.context)
 
 class Categorylist(TemplateView):
     template_name = "../templates/ServiceProvider/categorylist.html"
@@ -257,17 +243,21 @@ class Doctorcreate(CreateView):
     context = {}
 
     def get(self, request, *args, **kwargs):
-        obj=ProfileCompletion.objects.get(user=request.user.email)
-        self.context['form'] = self.form_class(initial={'organisation': obj.fullname})
+        self.context['form'] = self.form_class
         return render(request, self.template_name, self.context)
 
     def post(self, request, *args, **kwargs):
-        form = DoctorForm(data = request.POST, files = request.FILES)
+        form = DoctorForm(data=request.POST,files=request.FILES)
+        print(request.user)
         if form.is_valid():
-            form.save()
-            return redirect('Doctorlist')
+            print('sucess')
+            profile = form.save(commit=False)
+            profile.organisation = request.user           
+            profile.save()
+            return redirect('base')
         else:
-            return render(request, self.template_name, self.context)
+            print("form none")
+            return redirect('Doctorcreate')
 
 #doctor listing
 class Doctorlist(ListView):
@@ -275,16 +265,17 @@ class Doctorlist(ListView):
     model = Doctor
     form_class = DoctorForm
     context = {}
+    
+    def get(self, request, *args, **kwargs):
+        self.context['forms'] = self.form_class
+        qs=Doctor.objects.filter(organisation=request.user)
+        self.context['doc']=qs
+        return render(request, self.template_name, self.context)
 
-    def get(self,request,*args,**kwargs):
-        self.context['form']=self.form_class()
-        qs=self.model.objects.filter(organisation=request.user.fullname)
-        self.context['qs']=qs
-        return render(request,self.template_name,self.context)
 #doctor edit 
 class Doctoredit(TemplateView):
     model = Doctor
-    form_class = DoctorForm()
+    form_class = DoctorForm
     template_name = "../templates/ServiceProvider/DoctorEdit.html"
     context = {}
 
@@ -326,21 +317,9 @@ class DeleteDoctor(DeleteView):
 
 #end doctor section
 
-#listing the service provider
-
-class Servicecreatee(ListView):
-    template_name = "../templates/ServiceProvider/serviceprocreate.html"
-    model = Doctor
-    form_class = DoctorForm
-    context = {}
- 
-    def get(self, request, *args, **kwargs):
-        self.context['forms'] = self.form_class(initial={'User':request.user.fullname})
-        qs=self.model.objects.all()
-        self.context['doc']=qs
-        return render(request, self.template_name, self.context)
 
 
+#blood request section
 def home(request):
     qs=Request.objects.all()
     context={"Edit":qs}
@@ -387,7 +366,7 @@ class registeration(TemplateView):
             user = form.save(commit=False)
             user.is_active = False
             user.save()
-
+            messages.success(request,"Your Registration is success")
             current_site = get_current_site(request)
             email_subject = '[ACtive Your Account]',
             message = render_to_string('../templates/ServiceProvider/active.html',
@@ -432,29 +411,25 @@ class loginpage(TemplateView):
         if user is not None:
             login(request, user)
             print("success")
-            return redirect('base')
-        else:
-            print('login failed')
-            return redirect('loginpage')
+            if user.is_authenticated:
+                print("uni")
+                obj1=ProfileCompletion.objects.all()
+                print(obj1)
+                if obj1.exists():
+                    for datas in obj1:
+                        if request.user==datas.user:
+                            print('yes')
+                            return redirect('base')
+                        else:
+                            return redirect('Profilecreate')  
 
-    # def post(self, request, *args, **kwargs):
-    #     form = LoginForm(request.POST)
-    #     print('inside post')
-    #     # if form.is_valid():
-    #     print('inside form')
-    #     email = request.POST.get('email') # take email in form for username
-    #     password = request.POST.get('password')
-    #     print(email,",",password)
-    #     obj = CustomUser.objects.get(email=email)
-    #     print (obj.email)
-    #     user = authenticate(email=obj.email, password=password,backend='Customer.backends.CustomerBackend')
-    #     print('inside user')
-    #     if user is not None:
-    #         login(request, user)
-    #         print("success")
-    #         return redirect('customerprofilecreate')
-    #     else:
-    #         print("failed")
+                else: 
+                    # if request.user.email != datas.user:
+                        print('no')
+                        return redirect('Profilecreate')           
+        else:
+            print("failed")
+
 
 
 class ActivateAccountView(TemplateView):

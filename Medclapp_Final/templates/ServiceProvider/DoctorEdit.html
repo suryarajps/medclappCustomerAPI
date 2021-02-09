@@ -5,9 +5,9 @@
 {% block body_block %}
 <div class="jumbotron">
     <div class="container">
-        <h2 style="color: blueviolet;">{{request.user.name}}</h2>
+        <h2 style="color: blueviolet;"></h2>
 <form method="post">
-    {%csrf_token%}
+    {% csrf_token %}
     {{form.as_p}}
     <input type="submit" value="Proceed">
 

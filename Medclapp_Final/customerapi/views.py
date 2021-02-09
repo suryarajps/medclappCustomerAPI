@@ -9,9 +9,9 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.http import Http404
 from rest_framework.views import APIView
-from Customer.models import Request
-from .serializers import  FiltersSerializers, ProfilecompletioneSerializer, ServiceproviderSerializer,UserCreationSerializer,RequestSerializer,CategorySerializer,DepartmentSerializer,DoctorSerializer,LoginSerializer, UserprofileSerializer
-from Admin_Section.models import Category,Department
+from Customer.models import CustomerProfile, Familymembers, Request
+from .serializers import BlogSerilaizer, CustomerSerializer, FamilySerializer, ProfilecompletioneSerializer, ServiceproviderSerializer,UserCreationSerializer,RequestSerializer,CategorySerializer,DepartmentSerializer,DoctorSerializer,LoginSerializer, UserprofileSerializer
+from Admin_Section.models import Blog, Category,Department
 from ServiceProvider.models import Doctor,CustomUser, ProfileCompletion, Userprofile
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 from rest_framework.filters import SearchFilter
@@ -41,6 +41,13 @@ class CustomerLogin(APIView):
         user = serializer.validated_data['user']
         djangologin(request, user)
         token, created = Token.objects.get_or_create(user=user)
+        # if user.is_authenticated:
+        #     obj1=CustomerProfile.objects.all()
+        #     if obj1.exists():
+        #         for datas in obj1:
+        #             print(datas.user)
+        #             if user.email==datas.user:
+        #                 return Response({'token': token.key,'condition':'registered'}, status=200)
         return Response({'token': token.key}, status=200)
 
 # LOGOUT
@@ -92,25 +99,13 @@ class CategoryView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
-# SERVICE PROVIDER LIST (is same as listing category).
+# SERVICE PROVIDER LIST 
 
 class ServiceProviderList(generics.ListAPIView):
     queryset = ProfileCompletion.objects.all()
     serializer_class=ServiceproviderSerializer
     filter_backends = [SearchFilter]
     search_fields = ['fullname', 'category__name','departments__dept_name']
-
-    # def get(self, request, format=None):
-    #     query = ProfileCompletion.objects.all()
-    #     serializer = ServiceproviderSerializer(query, many=True)
-    #     return Response(serializer.data)
-    
-    # def post(self, request, format=None):
-    #     serializer = ServiceproviderSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #     return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
 # SERVICE / Department
 
@@ -143,47 +138,10 @@ class DoctorView(APIView):
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
 
-class SPList(ObjectMultipleModelAPIView):
-    # fields=('phone','email')
-    querylist = [
-        {'queryset': ProfileCompletion.objects.all(),'serializer_class': ProfilecompletioneSerializer,'label':'Service Provider'},
-        {'queryset': Userprofile.objects.all(), 'serializer_class': UserprofileSerializer},
-        {'queryset': CustomUser.objects.all(), 'serializer_class': UserCreationSerializer},
-    ]
-
-# #try
-# class FiltersView(APIView):
-#     def get(self,request,*args,**kwargs):
-#         filters = {}
-#         filters['model_1'] = Userprofile.objects.all()
-        
-#         filters['model_2'] = ProfileCompletion.objects.all()
-        
-#         filters['model_3'] = CustomUser.objects.all()
-#         print(filters)
-#         serializer = FiltersSerializers(filters)
-#         return Response (serializer.data, status=status.HTTP_200_OK)
-
-
 # SERVICE PROVIDER DETAILS
 
 class ServiceDetailView(APIView):
     
-    # def get_queryset(self,pk):
-    #     print(self.kwargs['pk'])
-    #     queryset = ProfileCompletion.objects.get(id=pk)
-    #     print(queryset)
-    #     queryset =Doctor.objects.filter(organisation=queryset.fullname)
-    #     print(queryset)
-    #     # qs=Service.objects.filter(category=self.kwargs['pk'])
-    #     # print(qs,queryset)
-    #     return queryset
-    
-    # def get(self, request,pk):
-    #     query = self.get_queryset(pk)
-    #     serializer = DoctorSerializer(query, many=True)
-    #     return Response(serializer.data)
-
     def get_object(self,pk):
         try:
             return ProfileCompletion.objects.get(id=pk)
@@ -194,4 +152,53 @@ class ServiceDetailView(APIView):
         query = self.get_object(pk)
         serializer = ProfilecompletioneSerializer(query)
         return Response(serializer.data)
+    
+
+#CUSTOMER 
+
+class CustomerView(APIView):
+    """
+    Retrieve, update or delete a snippet instance.
+    """
+    def get(self, request, format=None):
+        query = CustomerProfile.objects.all()
+        serializer = CustomerSerializer(query, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = CustomerProfile(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+#FAMILY MEMBERS
+
+class FamilyView(APIView):
+    """
+    Retrieve, update or delete a snippet instance.
+    """
+    def get(self, request, format=None):
+        query = Familymembers.objects.all()
+        serializer = FamilySerializer(query, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = Familymembers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#BLOG 
+ 
+class BlogView(APIView):
+     def get(self, request, format=None):
+        query = Blog.objects.all()
+        serializer = BlogSerilaizer(query, many=True)
+        return Response(serializer.data)
+
+
+
     

@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from Customer.models import Request,Familymembers,Medicalrecords,CustomerProfile
+from Customer.models import Request,Familymembers,CustomerProfile
 from ServiceProvider.models import CustomUser
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -14,7 +14,7 @@ class Customerprofileform(ModelForm):
 
     class Meta:
         model = CustomerProfile
-        fields = "__all__"
+        fields = ('fullname','bloodgroup','gender','dOB','height','weight','profilepicture','address')
         widgets = {
             'fullname': forms.TextInput(attrs={'class': 'form-control'}),
             'dOB' : DateInput(attrs={'class': 'form-control'}),
@@ -61,7 +61,7 @@ class TimeInput(forms.TimeInput):
 class Requestform(ModelForm):
     class Meta:
         model = Request
-        fields = "__all__"
+        fields = ('bloodgrouprequest','patientname','age','location','phonenumber','date','time')
         widgets = {
             'patientname': forms.TextInput(attrs={'class': 'form-control'}),
             'age': forms.TextInput(attrs={'class': 'form-control'}),
@@ -75,21 +75,10 @@ class Requestform(ModelForm):
 class Familymemberform(ModelForm):
     class Meta:
         model = Familymembers
-        fields = "__all__"
+        fields = ('fullname','gender','dob','relationship','phone')
         widgets = {
             'fullname': forms.TextInput(attrs={'class': 'form-control'}),
             'dob' : DateInput(attrs={'class': 'form-control'}),
             'relationship': forms.TextInput(attrs={'class': 'form-control'}),
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
         }           
-
-
-class Medicalrecordsform(ModelForm):
-    class Meta:
-        model = Medicalrecords
-        fields = "__all__"
-        widgets = {
-            'date' : DateInput(attrs={'class': 'form-control'}),
-            'detail': forms.TextInput(attrs={'class': 'form-control'}),
-            'file' : forms.ClearableFileInput(attrs={'multiple': True}),
-        }  

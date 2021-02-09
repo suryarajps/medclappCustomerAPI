@@ -4,6 +4,11 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="mb-3">
+      <label for="name" class="form-label">User</label>
+      {{form.user}}
+      <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
+    </div>
+    <div class="mb-3">
       <label for="name" class="form-label">Bloodgroup</label>
       {{form.bloodgrouprequest}}
       <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->

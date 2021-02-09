@@ -1,13 +1,18 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.views import PasswordChangeView,PasswordResetDoneView
+from django.urls import reverse_lazy
 
-from Customer.forms import LoginForm,CustomUserCreationForm,CustomUserChangeForm,Requestform,Familymemberform,Medicalrecordsform,Customerprofileform
-from Customer.models import Request,Familymembers,Medicalrecords,CustomerProfile
+from Customer.forms import LoginForm,CustomUserCreationForm,CustomUserChangeForm,Requestform,Familymemberform,Customerprofileform
+from Customer.models import Request,Familymembers,CustomerProfile
 from ServiceProvider.models import CustomUser
-from django.views.generic import TemplateView,CreateView
+from django.views.generic import TemplateView,CreateView,ListView
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.models import User
 from Customer.backends import CustomerBackend
+# from ServiceProvider.models import ProfileCompletion,Doctor
+from Admin_Section.models import Category
+from ServiceProvider.forms import CategoryForm
 
 
 
@@ -63,7 +68,7 @@ class loginn(TemplateView):
         print('inside post')
         # if form.is_valid():
         print('inside form')
-        phone = request.POST.get('phone') # take email in form for username
+        phone = request.POST.get('phone') 
         password = request.POST.get('password')
         print(phone,",",password)
         obj = CustomUser.objects.get(phone=phone)
@@ -73,15 +78,37 @@ class loginn(TemplateView):
         if user is not None:
             login(request, user)
             print("success")
-            return redirect('customerprofilecreate')
+            print(obj.email)
+            if user.is_authenticated:
+                print("uni")
+                obj1=CustomerProfile.objects.all()
+                print(obj1)
+                if obj1.exists():
+                    for datas in obj1:
+                        # print('k',datas.user)
+                        # print(request.user)
+                        if request.user==datas.user:
+                            print('yes')
+                            return redirect('index')
+                        else:
+                            return redirect('customerprofilecreate')  
+
+                else: 
+                    # if request.user.email != datas.user:
+                        print('no')
+                        return redirect('customerprofilecreate')           
         else:
             print("failed")
         #     print("success")
-        #     obj=CustomerProfile.objects.get(user=request.user.email)
-        #     if(request.user.email==obj.user):
-        #         return redirect('index')
-        #     else:
+        #     # obj=CustomerProfile.objects.get(user=request.user.email)
+            
+        #     if  not request.user.is_authenticated:
         #         return redirect('customerprofilecreate')
+        #         print('sucess1')
+
+        #     else:
+        #         print('fail1')
+        #         return redirect('index')
         # else:
         #     print("failed")
 
@@ -98,38 +125,58 @@ class logoutt(TemplateView):
 class Userdetails(TemplateView):
     context = {}
     def get(self, request):
-        obj = CustomerProfile.objects.get(user=request.user.email)
+        obj = CustomerProfile.objects.get(user=request.user)
         self.context['data']= obj
         return render(request,"../templates/Customer/myprofile.html",self.context)
 
 
 
 class Index(TemplateView):
+    template_name = "../templates/Customer/index.html"
+    model = Category
+    form_class = CategoryForm
     context = {}
-    def get(self, request):
-        obj = CustomerProfile.objects.get(user=request.user.email)
+
+    def querySet(self):
+         return self.model.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        obj = CustomerProfile.objects.get(user=request.user)
         self.context['data']= obj
-        return render(request,"../templates/Customer/index.html",self.context)
+
+        self.context['forms'] = self.querySet()
+        return render(request, self.template_name, self.context)
+        
+
+        return render(request,"../templates/Customer/index.html")  
 
 
 
 class Requestcreate(CreateView):
     model = Request
-    form_class = Requestform()
+    form_class = Requestform
     template_name = "../templates/Customer/requestcreate.html"
     context = {}
 
     def get(self, request, *args, **kwargs):
-        self.context['form'] = self.form_class(initial={'user': request.user.email})
+        self.context['form'] = self.form_class
+
+        obj = CustomerProfile.objects.get(user=request.user)
+        self.context['data']= obj
+        
         return render(request, self.template_name, self.context)
 
+
     def post(self, request, *args, **kwargs):
-        form = Requestform(data = request.POST,files = request.FILES)
+        form = Requestform(data=request.POST,files=request.FILES)
+        print(request.user)
         if form.is_valid():
-            form.save()
+            profile = form.save(commit=False)
+            profile.user = request.user           
+            profile.save()
             return redirect('index')
         else:
-            return redirect('requestcreate')
+            return redirect('requestcreate')  
 
 
 
@@ -137,46 +184,58 @@ class Requestcreate(CreateView):
 class Bloodrequests(TemplateView):
     template_name = "../templates/Customer/requestview.html"
     model = Request
+    form_class = Requestform
     context = {}
-
-    def querySet(self,request):
-        return self.model.objects.all().exclude(user=request.user)
 
 
     def get(self, request, *args, **kwargs):
-        self.context['forms'] = self.querySet()
+        self.context['form'] = self.form_class
+        qs = Request.objects.all()
+        self.context['request']=qs
+
+        obj = CustomerProfile.objects.get(user=request.user)
+        self.context['data']= obj
+
         return render(request, self.template_name, self.context)
 
 
 
 class Familymembercreate(CreateView):
     model = Familymembers
-    form_class = Familymemberform()
+    form_class = Familymemberform
     template_name = "../templates/Customer/familymembercreate.html"
     context = {}
 
     def get(self, request, *args, **kwargs):
-        self.context['form'] = self.form_class(initial={'user': request.user.email})
+        self.context['form'] = self.form_class
+
+        obj = CustomerProfile.objects.get(user=request.user)
+        self.context['data']= obj
+        
         return render(request, self.template_name, self.context)
 
+
     def post(self, request, *args, **kwargs):
-        form = Familymemberform(request.POST, request.FILES)
+        form = Familymemberform(data=request.POST,files=request.FILES)
+        print(request.user)
         if form.is_valid():
-            form.save()
+            profile = form.save(commit=False)
+            profile.user = request.user           
+            profile.save()
             return redirect('index')
         else:
-            return redirect('familymembercreate')        
-
+            return redirect('familymembercreate')       
 
 
 
 class Familymembersdetails(TemplateView):
     template_name = "../templates/Customer/familymemberdetails.html"
     model = Familymembers
+    form_class = Familymemberform
     context = {}
 
-    def querySet(self,request):
-        return self.model.objects.get(user=request.user.email)
+    # def querySet(self):
+    #     return self.model.objects.get(user=request.user.email)
 
     # def querySet(self,request):
     #     obj = CustomerProfile.objects.get(user=request.user.email)
@@ -184,41 +243,14 @@ class Familymembersdetails(TemplateView):
     #     return self.model.objects.filter(user='user')   
 
     def get(self, request, *args, **kwargs):
-        self.context['forms'] = self.querySet()
+        self.context['forms'] = self.form_class
+        qs = Familymembers.objects.filter(user=request.user)
+        self.context['family']=qs
+
+        obj = CustomerProfile.objects.get(user=request.user)
+        self.context['data']= obj
+        
         return render(request, self.template_name, self.context)        
-
-
-
-
-def Medicalrecordscreate(request):
-    context={}
-    context['form'] = Medicalrecordsform(initial={'user': request.user.email})
-
-    if request.method == "POST":
-        form = Medicalrecordsform(request.POST, request.FILES)
-        files = request.FILES.getlist('file')
-        if form.is_valid():
-            for f in files:
-                file_instance = Medicalrecords(file=f)
-                file_instance.save()
-        return redirect('index')
-    else:
-        form = Medicalrecordsform()
-    return render(request, '../templates/Customer/medicalrecordscreate.html', context)
-
-
-
-class Medicalrecordsdetails(TemplateView):
-    template_name = "../templates/Customer/medicalrecordsview.html"
-    model = Medicalrecords
-    context = {}
-    
-    def querySet(self,request):
-        return self.model.objects.filter(user=request.user.email)
-
-    def get(self, request, *args, **kwargs):
-        self.context['forms'] = self.querySet()
-        return render(request, self.template_name, self.context)    
 
 
 
@@ -229,15 +261,30 @@ class Customerprofilecreate(CreateView):
     context = {}
 
     def get(self, request, *args, **kwargs):
-        self.context['form'] = self.form_class(initial={'user': request.user.email})
+        self.context['form'] = self.form_class
         return render(request, self.template_name, self.context)
 
 
     def post(self, request, *args, **kwargs):
         form = Customerprofileform(data=request.POST,files=request.FILES)
+        print(request.user)
         if form.is_valid():
-            form.save()
+            print('sucess')
+            profile = form.save(commit=False)
+            profile.user = request.user           
+            profile.save()
             return redirect('index')
         else:
+            print("form none")
             return redirect('customerprofilecreate')         
                       
+                  
+class Passwordchange(PasswordChangeView):
+
+    template_name = "../templates/Customer/passwordchange.html"
+    success_url = reverse_lazy('passwordreset')
+
+class Passwordresetdone(PasswordResetDoneView):
+    
+    template_name = "../templates/Customer/passwordresetdone.html"
+

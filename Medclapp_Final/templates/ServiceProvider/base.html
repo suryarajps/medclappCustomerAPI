@@ -5,21 +5,19 @@
 <div class="container">
      <h1 class="h3 mb-0 text-gray-800"> Index </h1>
     <br>
-    {%csrf_token%}
+    {% csrf_token %}
     <div class="row"></div>
 
         {% for detail in forms %}
-        {% if request.user.is_authenticated %}
-            <div class="card" style="width: 11rem;">
-                <div class="card-body">
-                    <!-- <a href="{% url 'Servicecreatee'  %}" class="btn btn-primary">Details</a> -->
-                    <a href="{% url 'home' detail.id %}" class="btn btn-primary">view status</a>
-
-                </div>
+       
+            <div class="card" style="width: 9rem;">
+                    <p><a href="{% url 'home' detail.id %}" class="btn btn-primary">view status</a></p>
+                    
             </div>
         </div>
-        {% endif %}
-        {% endfor %}
+        
+        
     </div>
+    {% endfor %}
 </div>
 {% endblock %}

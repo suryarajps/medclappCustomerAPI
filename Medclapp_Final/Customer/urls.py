@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.urls import path
 from django.shortcuts import render
-from Customer.views import loginn,registeration,logoutt,Userdetails,Index,Requestcreate,Bloodrequests,Familymembercreate,Familymembersdetails,Medicalrecordscreate,Medicalrecordsdetails,Customerprofilecreate
+from Customer.views import loginn,registeration,logoutt,Userdetails,Index,Requestcreate,Bloodrequests,Familymembercreate,Familymembersdetails,Customerprofilecreate,Passwordchange,Passwordresetdone
 
 urlpatterns = [
     path('', registeration.as_view(), name="customerregister"),
@@ -14,9 +14,8 @@ urlpatterns = [
     path('requestlist/',Bloodrequests.as_view(), name="requestlist"),
     path('familymembercreate/',Familymembercreate.as_view(), name="familymembercreate"),
     path('familymemberdetails/', Familymembersdetails.as_view(), name='familymemberdetails'),
-    path('medicalrecordscreate/',Medicalrecordscreate, name="medicalrecordscreate"),
-    path('medicalrecordsview/', Medicalrecordsdetails.as_view(), name='medicalrecordsview'),
     path('customerprofilecreate/',Customerprofilecreate.as_view(), name="customerprofilecreate"),
-
+    path('changepassword/',Passwordchange.as_view(),name="passwordchange"),
+    path('resetpassword/',Passwordresetdone.as_view(),name="passwordreset"),
     
 ]

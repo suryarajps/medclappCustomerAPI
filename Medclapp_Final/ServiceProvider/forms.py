@@ -6,18 +6,17 @@ from django.contrib.auth.models import User
 from Admin_Section.models import Department,Category
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-from ServiceProvider.models import CustomUser,Userprofile,ProfileCompletion,Doctor
+from ServiceProvider.models import CustomUser,ProfileCompletion,Doctor
 
 
 class ProfileCompletionForm(ModelForm):
     class Meta(UserCreationForm):
         model = ProfileCompletion
-        fields = ('fullname','address','location','category','user')
+        fields = ('fullname','address','location','category','coverpicture','photo','departments','bed_numbers')
         widgets = {
             "fullname": forms.TextInput(attrs={"class": "form-control"}),
             "address": forms.TextInput(attrs={"class": "form-control"}),
             "location": forms.TextInput(attrs={"class": "form-control"}),
-            "user": forms.TextInput(attrs={"class": "form-control"}),
         } 
 
 
@@ -26,20 +25,22 @@ class CategoryForm(ModelForm):
         model = Category
         fields='__all__'
 
-class UserprofileForm(ModelForm):
-    class Meta:
-        model = Userprofile
-        fields='__all__'
 
 class ServiceForm(ModelForm):
     class Meta:
         model = Department
         fields='__all__'
 
-class DoctorForm(forms.ModelForm):
-    class Meta(UserCreationForm):
+class DoctorForm(ModelForm):
+    class Meta:
         model = Doctor
-        fields='__all__'
+        fields=('fullname','email','departments','specialisation','photo','phone')
+        widgets = {
+            "fullname": forms.TextInput(attrs={"class": "form-control"}),
+            "email": forms.TextInput(attrs={"class": "form-control"}),
+            "specialisation": forms.TextInput(attrs={"class": "form-control"}),
+            "phone": forms.TextInput(attrs={"class": "form-control"}),
+        }
 
 
 

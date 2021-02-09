@@ -1,7 +1,8 @@
 from django.contrib.auth import authenticate
-from rest_framework import serializers, exceptions
-from Customer.models import Request
-from Admin_Section.models import Category,Department
+from django.db.models import fields
+from rest_framework import response, serializers, exceptions
+from Customer.models import CustomerProfile, Familymembers, Request
+from Admin_Section.models import Blog, Category,Department
 from ServiceProvider.models import Doctor,CustomUser, ProfileCompletion, Userprofile
 
 
@@ -25,21 +26,33 @@ class UserCreationSerializer(serializers.ModelSerializer):
 """Login"""
 
 class LoginSerializer(serializers.Serializer):
-    email = serializers.CharField()
+    phone = serializers.CharField()
     password = serializers .CharField()
-
+    
     def validate(self, data):
-        email = data.get('email')
+        phone = data.get('phone')
         password = data.get('password')
-
-        if email and password:
-            user = authenticate(email=email, password=password)
+        reg=False
+        print(phone,",",password)
+        obj = CustomUser.objects.get(phone=phone)
+        if phone and password:
+            user = authenticate(email=obj.email, password=password)
             if user:
                 data['user'] = user
+                # msg = 'registered user'
+                # raise response({msg})
+                # # if user.is_authenticated:
+                # obj1=CustomerProfile.objects.all()
+                # if obj1.exists():
+                #     for datas in obj1:
+                #         print(datas.user)
+                #         if user.email==datas.user:
+                #             print(user.email)
+                #             msg = 'registered user'
+                #             raise response({msg})
             else:
                 msg = 'login failed'
                 raise exceptions.ValidationError(msg)
-
         else:
             msg = 'provide credientials'
             raise exceptions.ValidationError(msg)
@@ -73,8 +86,8 @@ class ProfilecompletioneSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfileCompletion
         fields = ('id','fullname','address','user','location','coverpicture','photo','bed_numbers','category','departments')
-    category=CategorySerializer(read_only=True)
-    departments=DepartmentSerializer(read_only=True)
+        category=CategorySerializer(read_only=True)
+        departments=DepartmentSerializer(read_only=True)
 
 
 """Doctors"""
@@ -104,15 +117,28 @@ class ServiceproviderSerializer(serializers.ModelSerializer):
     # phone=serializers.StringRelatedField(read_only=True)
     class Meta:
         model = ProfileCompletion
-        fields = fields = ('id','fullname','address','user','location','coverpicture','photo','category')
+        fields =('id','fullname','address','user','location','coverpicture','photo','category')
         depth=2
 
-# class ServiceproviderdetailSerializer(serializers.ModelSerializer):
+"""Customer creation"""
+
+class CustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model:CustomerProfile
+        fields = ('fullname','bloodgroup','gender','dOB','height','weight','address','profilepicture')
 
 
-#try
-class FiltersSerializers(serializers.Serializer):
-    model_1 = Userprofile
-    model_2 = ProfileCompletion
-    model_3 = CustomUser
-    
+"""Family """
+
+class FamilySerializer(serializers.ModelSerializer):
+    class Meta:
+        model:Familymembers
+        fields = ('fullname','gender','dOB','relationship','phone',)
+
+
+"""Blog"""
+
+class BlogSerilaizer(serializers.ModelSerializer):
+    class Meta:
+        model=Blog
+        fields="__all__"

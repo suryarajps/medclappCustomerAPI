@@ -1,5 +1,5 @@
 from django.contrib import admin
-from Customer.models import Request,Familymembers,Medicalrecords
+from Customer.models import Request,Familymembers
 from Admin_Section.models import Department,Category
 from ServiceProvider.models import Doctor,Userprofile,ProfileCompletion
 
@@ -14,5 +14,5 @@ admin.site.register(ProfileCompletion),
 admin.site.register(Doctor),
 admin.site.register(Request),
 admin.site.register(Familymembers),
-admin.site.register(Medicalrecords),
+
 

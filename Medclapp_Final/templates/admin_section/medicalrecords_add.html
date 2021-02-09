@@ -4,6 +4,10 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="mb-3">
+      <label for="name" class="form-label">User</label>
+      {{form.user}}
+    </div>
+    <div class="mb-3">
       <label for="name" class="form-label">Date</label>
       {{form.date}}
     </div>

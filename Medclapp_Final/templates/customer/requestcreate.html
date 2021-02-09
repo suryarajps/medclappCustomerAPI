@@ -9,6 +9,10 @@
         <div class="col-4">
             <form method="post" enctype="multipart/form-data" autocomplete="off">
                 {%csrf_token%}
+        {% comment %} <div class="mb-3">        
+        <label for="user" class="form-label" >User</label>
+                {{form.user}}
+        </div>         {% endcomment %}
         <div class="mb-3">
         <label for="bloodgrouprequest" class="form-label">Blood Group</label>
             {{form.bloodgrouprequest}}

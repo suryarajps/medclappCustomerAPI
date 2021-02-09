@@ -1,0 +1,15 @@
+{% extends 'admin_section/index.html' %}
+{% block body_block %}
+<div class="container">
+    <div class="row">
+    <div class="list-group">
+        <img width="500" height="500" src="{{form.blog_image.url}}">
+        <a  class="list-group-item list-group-item-action active" aria-current="true">
+          Blog Title : {{form.blog_title}}
+          Blog Description : {{form.blog_description}}
+        </a>
+      </div>
+    </div>
+    </div>
+    {% endblock %}
+     

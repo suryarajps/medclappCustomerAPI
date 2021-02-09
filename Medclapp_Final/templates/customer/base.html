@@ -38,7 +38,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Home</a>
+        <a href="{% url 'index' %}" class="nav-link">Home</a>
       </li>
       {% comment %} <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
@@ -46,7 +46,7 @@
     </ul>
 
     <!-- SEARCH FORM -->
-    <form class="form-inline ml-3">
+    {% comment %} <form class="form-inline ml-3">
       <div class="input-group input-group-sm">
         <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
         <div class="input-group-append">
@@ -55,7 +55,7 @@
           </button>
         </div>
       </div>
-    </form>
+    </form> {% endcomment %}
 
     <!-- Right navbar links -->
     
@@ -77,11 +77,11 @@
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
+        {% comment %} <div class="image">
           <img src="{{data.profilepicture.url}}" class="img-circle elevation-2" alt="User Image">
-        </div>
+        </div> {% endcomment %}
         <div class="info">
-          <a href="#" class="d-block">{{data.fullname}}</a>
+          <a href="#" class="d-block">Welcome {{data.fullname}}</a>
         </div>
       </div>
 
@@ -121,6 +121,12 @@
                 <a href="{% url 'userprofile' %}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>View my Profile</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'passwordchange' %}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Change Password</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -239,13 +245,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{% url 'medicalrecordscreate' %}" class="nav-link">
+                <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add Record</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{% url 'medicalrecordsview' %}" class="nav-link">
+                <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>View Records</p>
                 </a>

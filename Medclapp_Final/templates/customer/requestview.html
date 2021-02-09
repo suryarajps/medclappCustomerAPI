@@ -14,7 +14,7 @@
     <br>
     {%csrf_token%}
     <div class="row">
-        {% for datas in forms %}
+        {% for datas in request %}
         <div class="col-lg-3">
             <div class="card" style="width: 11rem;">
                 <div class="card-body">

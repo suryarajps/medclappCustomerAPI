@@ -1,12 +1,11 @@
 from django.shortcuts import render,redirect
-from ServiceProvider.models import Doctor,CustomUser
-from Customer.models import Request,Familymembers,Medicalrecords, CustomerProfile
-from Admin_Section.models import Category,Department,Advertisement
-from ServiceProvider.models import CustomUser,ProfileCompletion,Userprofile
+from ServiceProvider.models import Doctor,CustomUser,ProfileCompletion
+from Customer.models import Request,Familymembers,CustomerProfile
+from Admin_Section.models import Category,Department,Advertisement,Service,Blog
 from django.views.generic import TemplateView,DeleteView
-from Customer.forms import CustomUserCreationForm,Requestform,Medicalrecordsform,Familymemberform
-# from ServiceProvider.forms import CustomUserCreationForm
-from Admin_Section.forms import Categoryform,AdvertisementForm,DepartmentForm,CustomerAddForm
+from Customer.forms import CustomUserCreationForm,Requestform,Familymemberform
+from ServiceProvider.forms import ProfileCompletionForm
+from Admin_Section.forms import Categoryform,AdvertisementForm,DepartmentForm,CustomerAddForm,ServiceForm,BlogForm,DoctorForm
 from django.urls import reverse_lazy
 
 # Create your views here.
@@ -32,14 +31,15 @@ class ServiceProviderService(TemplateView):
     list2 = []
     def get(self,request,*awrgs,**kwargs):
         id = kwargs.get('pk')
-        obj = ProfileCompletion.objects.filter(id=id)
+        datas = ProfileCompletion.objects.filter(id=id)
         list1=[]
-        for datas in obj:
-            query = datas.fullname,datas.category,datas.id
-            services = Userprofile.objects.filter(organization=datas.fullname)
-            for qs in services:              
-                ls = qs.id,qs.departments,qs.category,qs.organization
-                list1.append(ls)
+        # for datas in obj:
+        query = datas.fullname,datas.category,datas.id,datas.department
+        list1.append(query)
+            # services = Userprofile.objects.filter(organization=datas.fullname)
+            # for qs in services:              
+            #     ls = qs.id,qs.departments,qs.category,qs.organization
+            #     list1.append(ls)
         return render(request,self.template_name,{'form':list1})
 
 
@@ -69,8 +69,8 @@ class DoctorList(TemplateView):
 
     def get(self,request,*awrgs,**kwargs):
         obj = Doctor.objects.all()
-        for data in obj:
-            print(data.fullname,data.category,data.service)
+        # for data in obj:
+        #     print(data.fullname,data.category,data.service)
         self.context['items'] = obj
         return render(request,self.template_name,self.context)
 
@@ -133,8 +133,8 @@ class CustomerDelete(DeleteView):
 class ProviderAdd(TemplateView):
     template_name = "../templates/admin_section/provider_add.html"
     context = {}
-    form_class = CustomUserCreationForm
-    model = CustomUser
+    form_class = ProfileCompletionForm
+    model = ProfileCompletion
 
     def get(self, request, *args, **kwargs):
         self.context['form'] = self.form_class
@@ -149,8 +149,8 @@ class ProviderAdd(TemplateView):
             return redirect('provideradd')
 
 class ProviderEdit(TemplateView):
-    form_class = CustomUserCreationForm
-    model = CustomUser
+    form_class = ProfileCompletionForm
+    model = ProfileCompletion
     template_name = "../templates/admin_section/provider_edit.html"
     context = {}
 
@@ -446,7 +446,7 @@ class AdvertisementAdd(TemplateView):
         return render(request, self.template_name, self.context)
 
     def post(self,request,*awrgs,**kwargs):
-        form = self.form_class(request.POST)
+        form = self.form_class(data=request.POST,files=request.FILES)
         if form.is_valid():
             form.save()
             return redirect('adminadvertisementlist')
@@ -494,9 +494,10 @@ class AdvertisementDelete(DeleteView):
 class AdvertisementList(TemplateView):
     template_name = "../templates/admin_section/advertisement_list.html"
     context = {}
+    model = Advertisement
 
     def get(self,request,*awrgs,**kwargs):
-        obj = Advertisement.objects.all()
+        obj = self.model.objects.all()
         print(obj)
         self.context['items'] = obj
         return render(request,self.template_name,self.context)
@@ -567,10 +568,75 @@ class FamilyMembersList(TemplateView):
         self.context['items'] = obj
         return render(request,self.template_name,self.context)
 
-class MedicalRecordsAdd(TemplateView):
-    template_name = "../templates/admin_section/medicalrecords_add.html"
+# class MedicalRecordsAdd(TemplateView):
+#     template_name = "../templates/admin_section/medicalrecords_add.html"
+#     context = {}
+#     form_class = Medicalrecordsform
+
+#     def get(self, request, *args, **kwargs):
+#         self.context['form'] = self.form_class
+#         return render(request, self.template_name, self.context)
+
+#     def post(self,request,*awrgs,**kwargs):
+#         form = self.form_class(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('adminrecordslist')
+#         else:
+#             return redirect('adminrecordsadd')
+
+# class MedicalRecordsEdit(TemplateView):
+#     model = Medicalrecords
+#     form_class = Medicalrecordsform
+#     template_name = "../templates/admin_section/medicalrecords_edit.html"
+#     context = {}
+
+#     def get(self, request, *args, **kwargs):
+#         id = kwargs.get('pk')
+#         qs = self.model.objects.get(id=id)
+#         form = self.form_class(instance=qs)
+#         self.context['form'] = form
+#         return render(request, self.template_name, self.context)
+
+#     def post(self, request, *args, **kwargs):
+#         id = kwargs.get("pk")
+#         qs = self.model.objects.get(id=id)
+#         form = self.form_class(instance=qs, data=request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('adminrecordslist')
+#         else:
+#             return render(request, self.template_name, self.context)
+
+# class MedicalRecordsView(TemplateView):
+#     model = Medicalrecords
+#     template_name = "../templates/admin_section/medicalrecords_view.html"
+#     context = {}
+
+#     def get(self, request, *args, **kwargs):
+#         id = kwargs.get("pk")
+#         qs = self.model.objects.get(id=id)
+#         self.context['form'] = qs
+#         return render(request, self.template_name, self.context)
+
+# class MedicalRecordsDelete(DeleteView):
+#     model = Medicalrecords
+#     success_url = reverse_lazy("adminrecordslist")
+
+# class MedicalRecordsList(TemplateView):
+#     template_name = "../templates/admin_section/medicalrecords_list.html"
+#     context = {}
+
+#     def get(self,request,*awrgs,**kwargs):
+#         obj = Medicalrecords.objects.all()
+#         print(obj)
+#         self.context['items'] = obj
+#         return render(request,self.template_name,self.context)
+
+class ServicesAdd(TemplateView):
+    template_name = "../templates/admin_section/service_add.html"
     context = {}
-    form_class = Medicalrecordsform
+    form_class = ServiceForm
 
     def get(self, request, *args, **kwargs):
         self.context['form'] = self.form_class
@@ -580,14 +646,14 @@ class MedicalRecordsAdd(TemplateView):
         form = self.form_class(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('adminrecordslist')
+            return redirect('adminservicelist')
         else:
-            return redirect('adminrecordsadd')
+            return redirect('adminserviceadd')
 
-class MedicalRecordsEdit(TemplateView):
-    model = Medicalrecords
-    form_class = Medicalrecordsform
-    template_name = "../templates/admin_section/medicalrecords_edit.html"
+class ServiceEdit(TemplateView):
+    model = Service
+    form_class = ServiceForm
+    template_name = "../templates/admin_section/service_edit.html"
     context = {}
 
     def get(self, request, *args, **kwargs):
@@ -603,13 +669,13 @@ class MedicalRecordsEdit(TemplateView):
         form = self.form_class(instance=qs, data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect('adminrecordslist')
+            return redirect('adminservicelist')
         else:
             return render(request, self.template_name, self.context)
 
-class MedicalRecordsView(TemplateView):
-    model = Medicalrecords
-    template_name = "../templates/admin_section/medicalrecords_view.html"
+class ServiceView(TemplateView):
+    model = Service
+    template_name = "../templates/admin_section/service_view.html"
     context = {}
 
     def get(self, request, *args, **kwargs):
@@ -618,16 +684,148 @@ class MedicalRecordsView(TemplateView):
         self.context['form'] = qs
         return render(request, self.template_name, self.context)
 
-class MedicalRecordsDelete(DeleteView):
-    model = Medicalrecords
-    success_url = reverse_lazy("adminrecordslist")
+class ServiceDelete(DeleteView):
+    model = Service
+    success_url = reverse_lazy("adminservicelist")
 
-class MedicalRecordsList(TemplateView):
-    template_name = "../templates/admin_section/medicalrecords_list.html"
+class ServiceList(TemplateView):
+    template_name = "../templates/admin_section/service_list.html"
     context = {}
 
     def get(self,request,*awrgs,**kwargs):
-        obj = Medicalrecords.objects.all()
+        obj = Service.objects.all()
         print(obj)
         self.context['items'] = obj
         return render(request,self.template_name,self.context)
+
+class BlogAdd(TemplateView):
+    template_name = "../templates/admin_section/blog_add.html"
+    context = {}
+    form_class = BlogForm
+
+    def get(self, request, *args, **kwargs):
+        self.context['form'] = self.form_class
+        return render(request, self.template_name, self.context)
+
+    def post(self,request,*awrgs,**kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('adminbloglist')
+        else:
+            return redirect('adminblogadd')
+
+class BlogEdit(TemplateView):
+    model = Blog
+    form_class = BlogForm
+    template_name = "../templates/admin_section/blog_edit.html"
+    context = {}
+
+    def get(self, request, *args, **kwargs):
+        id = kwargs.get('pk')
+        qs = self.model.objects.get(id=id)
+        form = self.form_class(instance=qs)
+        self.context['form'] = form
+        return render(request, self.template_name, self.context)
+
+    def post(self, request, *args, **kwargs):
+        id = kwargs.get("pk")
+        qs = self.model.objects.get(id=id)
+        form = self.form_class(instance=qs, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('adminbloglist')
+        else:
+            return render(request, self.template_name, self.context)
+
+class BlogView(TemplateView):
+    model = Blog
+    template_name = "../templates/admin_section/blog_view.html"
+    context = {}
+
+    def get(self, request, *args, **kwargs):
+        id = kwargs.get("pk")
+        qs = self.model.objects.get(id=id)
+        self.context['form'] = qs
+        return render(request, self.template_name, self.context)
+
+class BlogDelete(DeleteView):
+    model = Blog
+    success_url = reverse_lazy("adminbloglist")
+
+class BlogList(TemplateView):
+    template_name = "../templates/admin_section/blog_list.html"
+    context = {}
+
+    def get(self,request,*awrgs,**kwargs):
+        obj = Blog.objects.all()
+        print(obj)
+        self.context['items'] = obj
+        return render(request,self.template_name,self.context)
+
+class DoctorAdd(TemplateView):
+    template_name = "../templates/admin_section/doctor_add.html"
+    context = {}
+    form_class = DoctorForm
+
+    def get(self, request, *args, **kwargs):
+        self.context['form'] = self.form_class
+        return render(request, self.template_name, self.context)
+
+    def post(self,request,*awrgs,**kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('admindoctorlist')
+        else:
+            return redirect('adminblogadd')
+
+class DoctorEdit(TemplateView):
+    model = Blog
+    form_class = BlogForm
+    template_name = "../templates/admin_section/blog_edit.html"
+    context = {}
+
+    def get(self, request, *args, **kwargs):
+        id = kwargs.get('pk')
+        qs = self.model.objects.get(id=id)
+        form = self.form_class(instance=qs)
+        self.context['form'] = form
+        return render(request, self.template_name, self.context)
+
+    def post(self, request, *args, **kwargs):
+        id = kwargs.get("pk")
+        qs = self.model.objects.get(id=id)
+        form = self.form_class(instance=qs, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('adminbloglist')
+        else:
+            return render(request, self.template_name, self.context)
+
+class DoctorView(TemplateView):
+    model = Blog
+    template_name = "../templates/admin_section/blog_view.html"
+    context = {}
+
+    def get(self, request, *args, **kwargs):
+        id = kwargs.get("pk")
+        qs = self.model.objects.get(id=id)
+        self.context['form'] = qs
+        return render(request, self.template_name, self.context)
+
+class DoctorDelete(DeleteView):
+    model = Blog
+    success_url = reverse_lazy("adminbloglist")
+
+# class DoctorList(TemplateView):
+#     template_name = "../templates/admin_section/blog_list.html"
+#     context = {}
+
+#     def get(self,request,*awrgs,**kwargs):
+#         obj = Blog.objects.all()
+#         print(obj)
+#         self.context['items'] = obj
+#         return render(request,self.template_name,self.context)
+
+

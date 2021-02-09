@@ -16,7 +16,7 @@
             {% for val in forms %}
             {% if request.user.is_authenticated %}
             <tr>
-                <td><b>{{val.name}}</b></td>
+                <td><b>{{val.dept_name}}</b></td>
                 <td><a href="{% url 'servicingedit' val.id %}" class="btn btn-outline-primary">Edit Service</a></td>
                 <td></td>
                 <td><a href="{% url 'Deletservice' val.id %}" class="btn btn-outline-primary">Delete Service</a></td>

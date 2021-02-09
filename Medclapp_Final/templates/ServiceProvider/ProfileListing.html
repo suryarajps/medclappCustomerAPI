@@ -4,24 +4,30 @@
 {% block body_block %}
 {%csrf_token%}
 <div class="container">
-        <h1 class="h3 mb-0 text-gray-800" align='center'>Doctor List</h1>
+        <h1 class="h3 mb-0 text-gray-800" align='center'>Service Listing</h1>
         <br>
-        <h1>{{request.user.fullname}}</h1>
+        <h1>{{qs.fullname}}</h1>
         <table class="table">
             <tr>
                 <td ><b>Name</b></td>
+                 <td ><b>Phone</b></td>
                 <td ><b>address</b></td>
+                <td ><b>email</b></td>
                  <td ><b>location</b></td>
                   <td ><b>category</b></td>
+                  <td ><b>Cover Pic</b></td>
                 <td></td>
                 <td><b>Options</b></td>
             </tr>
-            {% for val in qs %}
+            {% for val in doc %}
             <tr>
                 <td><b>{{val.fullname}}</b></td>
+                 <td><b>{{request.user.phone}}</b></td>
                 <td><b>{{val.address}}</b></td>
+                 <td><b>{{request.user.email}}</b></td>
                 <td><b>{{val.location}}</b></td>
                 <td><b>{{val.category}}</b></td>
+                <td><img height="200px" class="card-img-top" src="{{val.coverpicture.url}}" alt="Card image cap"></td>
             </tr>
             {% endfor %}
         </table>
